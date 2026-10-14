@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedSchool Grammar: Quantifiers</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #064e3b 100%);
+            color: #f8fafc;
+            min-height: 100vh;
+        }
+
+        .font-display {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .clinical-card {
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(20, 184, 166, 0.3);
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(20, 184, 166, 0.05);
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #0d9488;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #14b8a6;
+        }
+
+        .option-btn {
+            transition: all 0.2s ease;
+        }
+        .option-btn:hover:not(:disabled) {
+            background: rgba(20, 184, 166, 0.1);
+            border-color: #14b8a6;
+            transform: translateX(4px);
+        }
+        .option-btn.selected {
+            border-color: #38bdf8;
+            background: rgba(56, 189, 248, 0.15);
+        }
+        .option-btn.correct {
+            border-color: #10b981 !important;
+            background: rgba(16, 185, 129, 0.2) !important;
+            color: #34d399 !important;
+        }
+        .option-btn.incorrect {
+            border-color: #ef4444 !important;
+            background: rgba(239, 68, 68, 0.2) !important;
+            color: #f87171 !important;
+        }
+
+        @keyframes pulse-medical {
+            0% { box-shadow: 0 0 0 0 rgba(20, 184, 166, 0.4); }
+            70% { box-shadow: 0 0 0 15px rgba(20, 184, 166, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(20, 184, 166, 0); }
+        }
+        .animate-pulse-med {
+            animation: pulse-medical 2s infinite;
+        }
+        
+        .shake {
+            animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+        }
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-1px, 0, 0); }
+            20%, 80% { transform: translate3d(2px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+            40%, 60% { transform: translate3d(4px, 0, 0); }
+        }
+    </style>
+</head>
+<body class="p-2 sm:p-4 min-h-screen flex flex-col items-center">
+
+    <header class="max-w-5xl w-full mb-4 flex justify-between items-center bg-slate-900/80 p-3 sm:p-4 rounded-2xl border border-teal-500/30 backdrop-blur-md">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-teal-900 flex items-center justify-center text-teal-400 text-xl border border-teal-500">
+                <i class="fa-solid fa-staff-snake"></i>
+            </div>
+            <div>
+                <h1 class="font-display text-lg sm:text-2xl text-teal-300 tracking-wide">
+                    MEDSCHOOL GRAMMAR
+                </h1>
+                <p class="text-xs text-slate-400 font-semibold uppercase tracking-wider hidden sm:block">Advanced Quantifiers Protocol</p>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-2 sm:gap-4">
+            <button id="btn-open-menu" onclick="window.toggleMenu()" class="hidden bg-slate-800 hover:bg-slate-700 text-teal-300 px-3 py-2 rounded-xl text-xs sm:text-sm border border-teal-500/40 transition flex items-center gap-2">
+                <i class="fa-solid fa-notes-medical"></i>
+                <span class="hidden sm:inline">Records</span> (30)
+            </button>
+            <div id="score-display" class="hidden bg-slate-900 border border-teal-500/50 px-4 py-2 rounded-xl flex items-center gap-2">
+                <i class="fa-solid fa-heart-pulse text-rose-500"></i>
+                <span id="score-text" class="font-display text-teal-300 text-sm sm:text-base">0 / 30</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-5xl w-full flex-1 flex flex-col">
+
+        <!-- TELA 1: RESUMO TEÓRICO COMPLETO -->
+        <section id="screen-study" class="clinical-card p-5 sm:p-8 rounded-3xl relative w-full flex-1 flex flex-col max-h-[85vh]">
+            <div class="text-center mb-4 shrink-0">
+                <span class="inline-block bg-teal-900/50 text-teal-300 text-xs px-3 py-1 rounded-full border border-teal-500/50 font-bold mb-2 tracking-widest uppercase">
+                    Protocolo de Estudo
+                </span>
+                <h2 class="font-display text-2xl sm:text-3xl text-white mb-2">
+                    Countable & Uncountable Nouns + Quantifiers
+                </h2>
+                <p class="text-sm text-slate-300 max-w-2xl mx-auto">
+                    Leia atentamente o prontuário abaixo. Dominar o diagnóstico entre contáveis e incontáveis é vital para prescrever o quantificador correto.
+                </p>
+            </div>
+
+            <div class="bg-slate-950/60 border border-slate-700/50 rounded-2xl p-4 sm:p-6 overflow-y-auto flex-1 space-y-6 text-sm sm:text-base text-slate-200">
+                
+                <!-- Parte 1: Conceito Base -->
+                <div>
+                    <h3 class="text-lg font-bold text-teal-400 border-b border-teal-900 pb-2 mb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-vials"></i> 1. A Base: Contáveis vs Incontáveis
+                    </h3>
+                    <p class="mb-3">Em inglês, o uso dos quantificadores depende diretamente do tipo de substantivo que vem logo a seguir. Existem dois grandes grupos:</p>
+                    
+                    <div class="grid sm:grid-cols-2 gap-4">
+                        <div class="bg-slate-900/80 p-4 rounded-xl border-l-4 border-emerald-500">
+                            <h4 class="font-bold text-emerald-400 mb-1">Countable Nouns (Contáveis)</h4>
+                            <p class="text-sm mb-2">Possuem forma singular e plural. Você pode contar usando números (one, two, three).</p>
+                            <p class="text-sm italic text-slate-400">Ex: <strong>apple</strong> (apples), <strong>doctor</strong> (doctors), <strong>pill</strong> (pills).</p>
+                            
+                            <div class="mt-3 bg-emerald-950/30 p-2 rounded text-xs">
+                                <span class="font-bold text-rose-300">⚠️ Irregulares Vitais:</span><br>
+                                <strong>person</strong> $\rightarrow$ <strong>people</strong> (pessoas)<br>
+                                <strong>child</strong> $\rightarrow$ <strong>children</strong> (crianças)<br>
+                                <strong>man/woman</strong> $\rightarrow$ <strong>men/women</strong> (homens/mulheres)<br>
+                                <strong>tooth</strong> $\rightarrow$ <strong>teeth</strong> (dentes)<br>
+                                <strong>foot</strong> $\rightarrow$ <strong>feet</strong> (pés)
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-900/80 p-4 rounded-xl border-l-4 border-rose-500">
+                            <h4 class="font-bold text-rose-400 mb-1">Uncountable Nouns (Incontáveis)</h4>
+                            <p class="text-sm mb-2"><strong>NÃO</strong> possuem plural. Você não conta eles diretamente (não se diz "two waters"). Precisa de unidades de medida (litros, fatias, copos).</p>
+                            <div class="mt-2 bg-rose-950/30 p-2 rounded text-xs">
+                                <span class="font-bold text-rose-300">⚠️ Lista Crítica (Sempre singulares):</span><br>
+                                <strong>water / blood</strong> (água / sangue)<br>
+                                <strong>money</strong> (dinheiro)<br>
+                                <strong>information</strong> (informação - <em>NUNCA diga informations</em>)<br>
+                                <strong>advice</strong> (conselho)<br>
+                                <strong>furniture</strong> (mobília)<br>
+                                <strong>homework</strong> (lição de casa)<br>
+                                <strong>news</strong> (notícias - <em>O 's' faz parte da palavra, é singular!</em>)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-bold text-teal-400 border-b border-teal-900 pb-2 mb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-syringe"></i> 2. Aplicando os Quantifiers
+                    </h3>
+                    
+                    <div class="space-y-4">
+                        <!-- Many / Much -->
+                        <div class="bg-slate-900 p-4 rounded-xl border border-slate-700">
+                            <h4 class="font-display text-lg text-cyan-300 mb-2">MANY (Muitos/Muitas) vs MUCH (Muito/Muita)</h4>
+                            <ul class="list-disc list-inside space-y-2 text-sm">
+                                <li>Use <strong class="text-emerald-400">MANY</strong> apenas para coisas <strong class="text-emerald-400">Contáveis no Plural</strong>.
+                                    <br><span class="text-slate-400 ml-5 italic">Ex: How <strong>many patients</strong> did you see? (Quantos pacientes você atendeu?)</span>
+                                </li>
+                                <li>Use <strong class="text-rose-400">MUCH</strong> apenas para coisas <strong class="text-rose-400">Incontáveis</strong>.
+                                    <br><span class="text-slate-400 ml-5 italic">Ex: I don't have <strong>much time</strong>. (Eu não tenho muito tempo.)</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Few / A few -->
+                        <div class="bg-slate-900 p-4 rounded-xl border border-slate-700">
+                            <h4 class="font-display text-lg text-cyan-300 mb-2">FEW vs A FEW (Para Contáveis)</h4>
+                            <p class="text-sm mb-2">Ambos significam "poucos" ou "alguns", mas têm conotações (sentimentos) diferentes:</p>
+                            <ul class="list-disc list-inside space-y-2 text-sm">
+                                <li><strong class="text-red-400">FEW</strong> (Sem o "a"): Significa "poucos". Tem tom <strong>NEGATIVO</strong> (não é o suficiente, é uma escassez).
+                                    <br><span class="text-slate-400 ml-5 italic">Ex: He has <strong>few friends</strong>. (Ele tem poucos amigos - ele é solitário/triste.)</span>
+                                </li>
+                                <li><strong class="text-green-400">A FEW</strong> (Com o "a"): Significa "alguns". Tem tom <strong>POSITIVO</strong> (é uma quantidade pequena, mas suficiente).
+                                    <br><span class="text-slate-400 ml-5 italic">Ex: I have <strong>a few friends</strong>. (Eu tenho alguns amigos - eu estou feliz com eles.)</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Little / A little -->
+                        <div class="bg-slate-900 p-4 rounded-xl border border-slate-700">
+                            <h4 class="font-display text-lg text-cyan-300 mb-2">LITTLE vs A LITTLE (Para Incontáveis)</h4>
+                            <p class="text-sm mb-2">A mesma lógica do Few/A few, mas aplicado a líquidos, dinheiro, tempo (incontáveis):</p>
+                            <ul class="list-disc list-inside space-y-2 text-sm">
+                                <li><strong class="text-red-400">LITTLE</strong>: "Pouco". Tom <strong>NEGATIVO</strong> (falta).
+                                    <br><span class="text-slate-400 ml-5 italic">Ex: There is <strong>little hope</strong> for the patient. (Há pouca esperança - a situação é grave.)</span>
+                                </li>
+                                <li><strong class="text-green-400">A LITTLE</strong>: "Um pouco". Tom <strong>POSITIVO</strong> (suficiente).
+                                    <br><span class="text-slate-400 ml-5 italic">Ex: I speak <strong>a little Spanish</strong>. (Eu falo um pouco de espanhol - consigo me comunicar.)</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Some -->
+                        <div class="bg-slate-900 p-4 rounded-xl border border-slate-700">
+                            <h4 class="font-display text-lg text-cyan-300 mb-2">SOME (Algum/Alguns/Um pouco)</h4>
+                            <ul class="list-disc list-inside space-y-2 text-sm">
+                                <li>Serve tanto para <strong>Contáveis</strong> quanto <strong>Incontáveis</strong>.</li>
+                                <li>Usado principalmente em frases <strong>Afirmativas</strong>.
+                                    <br><span class="text-slate-400 ml-5 italic">Ex: I need <strong>some medicine</strong>. (Preciso de algum remédio.)</span>
+                                </li>
+                                <li><strong class="text-amber-400">Exceção de Ouro:</strong> Usamos em perguntas quando estamos <strong>oferecendo</strong> ou <strong>pedindo</strong> algo.
+                                    <br><span class="text-slate-400 ml-5 italic">Ex: Would you like <strong>some water</strong>? (Você gostaria de um pouco de água? - Oferta)</span><br>
+                                    <span class="text-slate-400 ml-5 italic">Ex: Can I have <strong>some painkillers</strong>? (Posso pegar alguns analgésicos? - Pedido)</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-5 shrink-0">
+                <button onclick="window.startQuiz()" class="w-full animate-pulse-med bg-teal-600 hover:bg-teal-500 text-white font-display text-xl px-6 py-4 rounded-xl shadow-lg transition active:scale-95 flex justify-center items-center gap-3">
+                    <i class="fa-solid fa-stethoscope"></i> START QUIZ
+                </button>
+            </div>
+        </section>
+
+        <section id="screen-quiz" class="hidden clinical-card p-5 sm:p-8 rounded-3xl relative w-full flex-1 flex flex-col">
+            
+            <div class="mb-4 shrink-0">
+                <div class="flex justify-between items-center text-xs sm:text-sm font-bold text-teal-300 mb-2">
+                    <span id="q-category" class="bg-slate-900 px-3 py-1 rounded-full border border-teal-800">
+                        Part 1: Multiple Choice
+                    </span>
+                    <span id="q-counter" class="font-display tracking-wider">
+                        Question 1 / 30
+                    </span>
+                </div>
+                <div class="w-full bg-slate-900 h-2 rounded-full overflow-hidden border border-slate-700">
+                    <div id="progress-bar" class="bg-teal-500 h-full transition-all duration-300" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <div class="mb-6 bg-slate-900 p-5 rounded-2xl border border-teal-500/20 shrink-0 shadow-inner">
+                <h3 id="question-text" class="text-lg sm:text-xl font-medium text-white leading-relaxed">
+                    Carregando pergunta...
+                </h3>
+            </div>
+
+            <!-- Dynamic Input Area (MCQ or Text) -->
+            <div id="input-area" class="flex-1 mb-4 flex flex-col justify-center">
+                <!-- Content injected via JS -->
+            </div>
+
+            <div id="feedback-box" class="hidden mb-5 p-4 rounded-xl border text-sm sm:text-base shrink-0">
+                <h4 id="feedback-title" class="font-bold mb-1 flex items-center gap-2"></h4>
+                <p id="feedback-message" class="text-slate-200"></p>
+            </div>
+
+            <!-- Controls -->
+            <div class="flex justify-between items-center gap-3 pt-4 border-t border-slate-800 shrink-0">
+                <button id="btn-prev" onclick="window.prevQuestion()" class="px-4 py-2.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-sm transition">
+                    <i class="fa-solid fa-chevron-left mr-1"></i> Prev
+                </button>
+
+                <button id="btn-check" onclick="window.confirmAnswer()" class="flex-1 max-w-[200px] bg-teal-600 hover:bg-teal-500 text-white font-display text-lg py-3 rounded-xl shadow-lg transition active:scale-95">
+                    CHECK <i class="fa-solid fa-check ml-1"></i>
+                </button>
+
+                <button id="btn-next" onclick="window.nextQuestion()" class="px-4 py-2.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-sm transition">
+                    Next <i class="fa-solid fa-chevron-right ml-1"></i>
+                </button>
+            </div>
+        </section>
+
+        <section id="screen-report" class="hidden clinical-card p-6 sm:p-10 rounded-3xl text-center w-full flex-1 flex flex-col justify-center">
+            <div class="inline-block p-5 bg-teal-900/40 rounded-full border border-teal-500 mb-4">
+                <i class="fa-solid fa-notes-medical text-5xl text-teal-400"></i>
+            </div>
+            
+            <h2 id="report-title" class="font-display text-3xl text-white mb-2">
+                Medical Report
+            </h2>
+            <p class="text-slate-400 mb-8">
+                Análise do seu diagnóstico gramatical.
+            </p>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                <div class="bg-slate-900 border border-emerald-500/30 p-4 rounded-xl">
+                    <span class="text-xs font-bold text-emerald-500 block mb-1 uppercase tracking-wider">Acertos</span>
+                    <span id="stat-correct" class="font-display text-3xl text-emerald-400">0</span>
+                    <span id="stat-correct-pct" class="text-xs text-emerald-400/70 block mt-1">0%</span>
+                </div>
+                <div class="bg-slate-900 border border-rose-500/30 p-4 rounded-xl">
+                    <span class="text-xs font-bold text-rose-500 block mb-1 uppercase tracking-wider">Erros</span>
+                    <span id="stat-error" class="font-display text-3xl text-rose-400">0</span>
+                    <span id="stat-error-pct" class="text-xs text-rose-400/70 block mt-1">0%</span>
+                </div>
+                <div class="bg-slate-900 border border-cyan-500/30 p-4 rounded-xl">
+                    <span class="text-xs font-bold text-cyan-500 block mb-1 uppercase tracking-wider">Objective (Q1-20)</span>
+                    <span id="stat-mc-pct" class="font-display text-2xl text-cyan-400">0%</span>
+                </div>
+                <div class="bg-slate-900 border border-purple-500/30 p-4 rounded-xl">
+                    <span class="text-xs font-bold text-purple-500 block mb-1 uppercase tracking-wider">Open (Q21-30)</span>
+                    <span id="stat-open-pct" class="font-display text-2xl text-purple-400">0%</span>
+                </div>
+            </div>
+
+            <div id="diagnostic-feedback" class="text-left bg-slate-900 border border-slate-700 p-5 rounded-xl mb-8 space-y-3">
+                <!-- Recomendações injetadas aqui -->
+            </div>
+
+            <button onclick="window.location.reload()" class="bg-teal-600 hover:bg-teal-500 text-white font-display text-lg px-8 py-4 rounded-xl transition inline-flex items-center gap-3 w-fit mx-auto">
+                <i class="fa-solid fa-rotate-right"></i> RESTART
+            </button>
+        </section>
+
+    </main>
+
+    <div id="menu-modal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-sm z-50 hidden flex justify-end">
+        <div class="bg-slate-900 w-full max-w-sm h-full border-l border-teal-500/30 flex flex-col shadow-2xl slide-in-right">
+            <div class="p-5 border-b border-slate-800 flex justify-between items-center">
+                <h3 class="font-display text-xl text-teal-300">Records (30 Qs)</h3>
+                <button onclick="window.toggleMenu()" class="text-slate-400 hover:text-white text-2xl">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="p-4 flex gap-3 text-xs bg-slate-950/50 justify-center">
+                <span class="flex items-center gap-1 text-slate-400"><span class="w-3 h-3 rounded-full bg-slate-700"></span> Pending</span>
+                <span class="flex items-center gap-1 text-emerald-400"><span class="w-3 h-3 rounded-full bg-emerald-600"></span> Correct</span>
+                <span class="flex items-center gap-1 text-rose-400"><span class="w-3 h-3 rounded-full bg-rose-600"></span> Incorrect</span>
+            </div>
+            <div id="grid-container" class="p-4 grid grid-cols-5 gap-2 overflow-y-auto flex-1 content-start">
+                <!-- Grid buttons injected via JS -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data Structure for Questions
+        const rawQuestions = [
+            // PART 1: MCQ (20 Questions)
+            {
+                id: 1, type: "mc", category: "Part 1: Objective Diagnosis",
+                text: "The patient lost _____ blood during the surgery.",
+                options: ["a lot of", "many", "a few", "few", "any"], correctIndex: 0,
+                explanation: "'Blood' (sangue) é incontável. Não podemos usar many, few ou a few. 'A lot of' (muito) é a opção correta."
+            },
+            {
+                id: 2, type: "mc", category: "Part 1: Objective Diagnosis",
+                text: "How _____ times do I have to tell you to take your medicine?",
+                options: ["many", "much", "little", "some", "a little"], correctIndex: 0,
+                explanation: "'Times' (vezes) aqui está no plural e é contável (one time, two times). Portanto, usamos 'many'."
+            },
+            {
+                id: 3, type: "mc", category: "Part 1: Objective Diagnosis",
+                text: "I only have _____ minutes before my next appointment. Please, be quick.",
+                options: ["a few", "a little", "little", "much", "some"], correctIndex: 0,
+                explanation: "'Minutes' é contável. Como ele tem 'alguns' minutos (quantidade positiva), usamos 'a few'."
+            },
+            {
+                id: 4, type: "mc", category: "Part 1: Objective Diagnosis",
+                text: "Unfortunately, the doctor has _____ hope that the patient will recover.",
+                options: ["little", "a little", "a few", "few", "many"], correctIndex: 0,
+                explanation: "'Hope' (esperança) é incontável. Como a frase diz 'unfortunately' (infelizmente), o tom é negativo (quase nenhuma esperança), logo usamos 'little' (sem o 'a')."
+            },
+            {
+                id: 5, type: "mc", category: "Part 1: Objective Diagnosis",
+                text: "Can I get you _____ water? You look very pale.",
+                options: ["some", "any", "many", "few", "little"], correctIndex: 0,
+                explanation: "Mesmo sendo uma pergunta, é uma OFERTA ('Would you like / Can I get you'). Nesses casos, usamos 'some' em vez de 'any'."
+            },
+            {
+                id: 6, type: "mc", category: "Part 1: Objective Diagnosis",
+                text: "There were very _____ people at the hospital today. It was surprisingly quiet.",
+                options: ["few", "a few", "little", "much", "some"], correctIndex: 0,
+                explanation: "'People' (pessoas) é o plural irregular de person, sendo contável. Como estava quieto (pouquíssimas pessoas, conotação de escassez), usamos 'few'."
+            },
+            {
+                id: 7, type: "mc", category: "Part 1: Objective Diagnosis",
+                text: "I have _____ good news for you regarding your exams!",
+                options: ["some", "a", "many", "a few", "few"], correctIndex: 0,
+                explanation: "'News' (notícia) é INCONTÁVEL em inglês (o 's' faz parte da palavra, não é plural). Usamos 'some' para dizer 'uma boa notícia' ou 'algumas boas notícias'."
+            },
+            {
+                id: 8, type: "mc", category: "Part 1: Objective Diagnosis",
+                text: "We don't have _____ information about the new virus yet.",
+                options: ["much", "many", "a few", "some", "little"], correctIndex: 0,
+                explanation: "'Information' é incontável (não tem plural). Em frases negativas (don't), usamos 'much' para dizer 'muita'."
+            },
+            {
+                id: 9, type: "mc", category: "Part 1: Objective Diagnosis",
+                text: "She speaks _____ French, so she could understand the foreign doctor.",
+                options: ["a little", "little", "few", "a few", "many"], correctIndex: 0,
+                explanation: "Idiomas (French) são incontáveis. Como ela conseguiu entender (resultado positivo), ela fala 'um pouco' = 'a little'."
+            },
+            {
+                id: 10, type: "mc", category: "Part 1: Objective Diagnosis",
+                text: "How _____ children are in the pediatrician's waiting room?",
+                options: ["many", "much", "little", "a little", "some"], correctIndex: 0,
+                explanation: "'Children' é o plural irregular de child (contável). Para perguntar 'quantos(as)', usamos 'How many'."
+            },
+            {
+                id: 11, type: "mc", category: "Part 1: Objective Diagnosis",
+                text: "He ate too _____ junk food and now his stomach hurts.",
+                options: ["much", "many", "a few", "few", "some"], correctIndex: 0,
+                explanation: "'Food' (comida) em sentido geral é incontável. Para dizer 'muita comida', usamos 'much' (geralmente acompanhado de too para exagero)."
+            },
+            {
+                id: 12, type: "mc", category: "Part 1: Objective Diagnosis",
+                text: "The surgeon needs _____ rest. He has been operating for 12 hours.",
+                options: ["some", "many", "few", "a few", "any"], correctIndex: 0,
+                explanation: "'Rest' (descanso) é incontável. Em frases afirmativas, usamos 'some' (um pouco de descanso)."
+            },
+            {
+                id: 13, type: "mc", category: "Part 1: Objective Diagnosis",
+                text: "There are _____ nurses available in the ER tonight. We need to call more staff.",
+                options: ["few", "a few", "little", "a little", "much"], correctIndex: 0,
+                explanation: "'Nurses' (enfermeiros) é contável. Eles precisam chamar mais equipe, logo, a quantidade atual é insuficiente (negativo) = 'few'."
+            },
+            {
+                id: 14, type: "mc", category: "Part 1: Objective Diagnosis",
+                text: "Let me give you _____ advice on how to lower your blood pressure.",
+                options: ["some", "an", "many", "a few", "few"], correctIndex: 0,
+                explanation: "'Advice' (conselho) é INCONTÁVEL em inglês (não existe advices nem an advice). Usamos 'some advice' (um conselho / alguns conselhos)."
+            },
+            {
+                id: 15, type: "mc", category: "Part 1: Objective Diagnosis",
+                text: "Do you have _____ pain in your chest?",
+                options: ["any", "many", "a few", "few", "these"], correctIndex: 0,
+                explanation: "'Pain' (dor) é incontável. Em perguntas normais (não sendo pedido nem oferta), usamos 'any' (alguma dor?)."
+            },
+            {
+                id: 16, type: "mc", category: "Part 1: Objective Diagnosis",
+                text: "I bought _____ new furniture for the waiting room.",
+                options: ["some", "a", "many", "a few", "few"], correctIndex: 0,
+                explanation: "'Furniture' (mobília/móveis) é uma palavra INCONTÁVEL em inglês e nunca vai para o plural. Usamos 'some'."
+            },
+            {
+                id: 17, type: "mc", category: "Part 1: Objective Diagnosis",
+                text: "She has _____ teeth missing due to the accident.",
+                options: ["a few", "a little", "little", "much", "any"], correctIndex: 0,
+                explanation: "'Teeth' é o plural irregular de tooth (contável). 'Um pequeno número de dentes' = 'a few'."
+            },
+            {
+                id: 18, type: "mc", category: "Part 1: Objective Diagnosis",
+                text: "I have very _____ patience for people who don't follow medical instructions.",
+                options: ["little", "a little", "few", "a few", "many"], correctIndex: 0,
+                explanation: "'Patience' (paciência) é incontável. Usado com 'very' para indicar escassez (pouquíssima paciência), usamos 'little'."
+            },
+            {
+                id: 19, type: "mc", category: "Part 1: Objective Diagnosis",
+                text: "How _____ does this treatment cost?",
+                options: ["much", "many", "some", "little", "few"], correctIndex: 0,
+                explanation: "Para perguntar preço/valor de algo, ou sobre dinheiro (incontável), usamos 'How much'."
+            },
+            {
+                id: 20, type: "mc", category: "Part 1: Objective Diagnosis",
+                text: "Could you put _____ more sugar in my tea, please?",
+                options: ["a little", "a few", "little", "few", "many"], correctIndex: 0,
+                explanation: "'Sugar' (açúcar) é incontável. Como é um pedido para adicionar uma quantidade positiva (um pouco), usa-se 'a little'."
+            },
+
+            {
+                id: 21, type: "open", category: "Part 2: Clinical Prescription (Typing)",
+                text: "Answer the question logically: How much water do you drink a day?",
+                placeholder: "Type a complete or short sentence...",
+                validationWords: ["much", "little", "some", "lot", "lots", "liters", "liter", "glasses", "glass", "bottles", "bottle", "plenty"],
+                numberAllowed: true,
+                explanation: "Para responder sobre água (incontável), você deve usar expressões como 'a lot of', 'some', 'little', ou unidades de medida (liters, glasses, bottles). Ex: 'I drink 2 liters' ou 'I drink a lot of water'."
+            },
+            {
+                id: 22, type: "open", category: "Part 2: Clinical Prescription (Typing)",
+                text: "Answer: How many hours do you usually sleep at night?",
+                placeholder: "E.g., I sleep...",
+                validationWords: ["many", "few", "some", "lot", "lots", "hours", "hour", "plenty", "enough"],
+                numberAllowed: true,
+                explanation: "Horas são contáveis. Você pode usar um número exato (ex: 8 hours), ou quantificadores como 'many', 'a few', 'a lot of'."
+            },
+            {
+                id: 23, type: "open", category: "Part 2: Clinical Prescription (Typing)",
+                text: "Answer: How much sugar do you put in your coffee?",
+                placeholder: "Type your answer...",
+                validationWords: ["much", "little", "some", "lot", "lots", "spoons", "spoon", "none", "any", "no", "nothing"],
+                numberAllowed: true,
+                explanation: "Açúcar é incontável. Respostas válidas incluem 'a little', 'a lot', 'none', ou medidas como '2 spoons' (colheres)."
+            },
+            {
+                id: 24, type: "open", category: "Part 2: Clinical Prescription (Typing)",
+                text: "Answer: How many friends do you have?",
+                placeholder: "Type your answer...",
+                validationWords: ["many", "few", "some", "lot", "lots", "none", "several", "couple"],
+                numberAllowed: true,
+                explanation: "Amigos são contáveis. Você pode responder com números (ex: 5 friends) ou com quantificadores: 'a few', 'many', 'a lot of'."
+            },
+            {
+                id: 25, type: "open", category: "Part 2: Clinical Prescription (Typing)",
+                text: "Answer: How much time do you spend studying English every week?",
+                placeholder: "Type your answer...",
+                validationWords: ["much", "little", "some", "lot", "lots", "hours", "hour", "minutes", "minute", "plenty"],
+                numberAllowed: true,
+                explanation: "Tempo em si é incontável (a lot of time, little time), mas pode ser respondido com medidas (2 hours, 30 minutes)."
+            },
+            {
+                id: 26, type: "open", category: "Part 2: Clinical Prescription (Typing)",
+                text: "Answer: How many times a year do you go to the doctor?",
+                placeholder: "Type your answer...",
+                validationWords: ["many", "few", "some", "lot", "lots", "times", "time", "once", "twice", "never", "always"],
+                numberAllowed: true,
+                explanation: "Você pode usar frequências específicas (once, twice, 3 times) ou 'a few times', 'many times', 'never'."
+            },
+            {
+                id: 27, type: "open", category: "Part 2: Clinical Prescription (Typing)",
+                text: "Answer: How much money do you spend on junk food?",
+                placeholder: "Type your answer...",
+                validationWords: ["much", "little", "some", "lot", "lots", "reais", "dollars", "bucks", "nothing", "none", "zero"],
+                numberAllowed: true,
+                explanation: "Dinheiro é incontável (much, little, a lot). Pode-se usar moedas (contáveis): '50 reais'."
+            },
+            {
+                id: 28, type: "open", category: "Part 2: Clinical Prescription (Typing)",
+                text: "Answer: How many books do you read in a year?",
+                placeholder: "Type your answer...",
+                validationWords: ["many", "few", "some", "lot", "lots", "books", "book", "none", "several", "couple"],
+                numberAllowed: true,
+                explanation: "Livros são contáveis. Use 'a few', 'many', 'a lot of', ou números."
+            },
+            {
+                id: 29, type: "open", category: "Part 2: Clinical Prescription (Typing)",
+                text: "Answer: How much coffee did you drink this morning?",
+                placeholder: "Type your answer...",
+                validationWords: ["much", "little", "some", "lot", "lots", "cups", "cup", "mugs", "mug", "none", "didn't", "nothing"],
+                numberAllowed: true,
+                explanation: "Café é incontável. Usa-se 'a little', 'a lot', ou contêineres: '2 cups' (xícaras)."
+            },
+            {
+                id: 30, type: "open", category: "Part 2: Clinical Prescription (Typing)",
+                text: "Answer: How many apples are there in your fridge right now?",
+                placeholder: "Type your answer...",
+                validationWords: ["many", "few", "some", "lot", "lots", "apples", "apple", "none", "several", "couple", "dozen"],
+                numberAllowed: true,
+                explanation: "Maçãs são contáveis. Você pode responder com números (3 apples), 'a few', 'none' ou 'many'."
+            }
+        ];
+
+        window.quizState = {
+            processedQuestions: [],
+            currentIndex: 0,
+            answers: [],
+            isConfirmed: [],
+            isCorrect: [] // Arrays of size 30
+        };
+
+        window.startQuiz = function() {
+            // Clone and Shuffle options for MCQ (Fisher-Yates)
+            let rawClone = JSON.parse(JSON.stringify(rawQuestions));
+            
+            window.quizState.processedQuestions = rawClone.map(q => {
+                if (q.type === 'mc') {
+                    // map options to objects to keep track of the correct one
+                    let opts = q.options.map((text, idx) => ({ text, isCorrect: idx === q.correctIndex }));
+                    
+                    // Shuffle
+                    for (let i = opts.length - 1; i > 0; i--) {
+                        const j = Math.floor(Math.random() * (i + 1));
+                        [opts[i], opts[j]] = [opts[j], opts[i]];
+                    }
+
+                    // Find new correct index
+                    let newCorrectIdx = opts.findIndex(o => o.isCorrect);
+                    
+                    return {
+                        ...q,
+                        options: opts.map(o => o.text),
+                        correctIndex: newCorrectIdx
+                    };
+                }
+                return q;
+            });
+
+            window.quizState.answers = new Array(30).fill(null);
+            window.quizState.isConfirmed = new Array(30).fill(false);
+            window.quizState.isCorrect = new Array(30).fill(false);
+            window.quizState.currentIndex = 0;
+
+            document.getElementById('screen-study').classList.add('hidden');
+            document.getElementById('screen-quiz').classList.remove('hidden');
+            document.getElementById('btn-open-menu').classList.remove('hidden');
+            document.getElementById('score-display').classList.remove('hidden');
+
+            window.renderQuestion();
+            window.updateHeader();
+        };
+
+        window.renderQuestion = function() {
+            const state = window.quizState;
+            const q = state.processedQuestions[state.currentIndex];
+            const isConfirmed = state.isConfirmed[state.currentIndex];
+
+            // Progress bar
+            document.getElementById('q-counter').innerText = `Question ${state.currentIndex + 1} / 30`;
+            document.getElementById('q-category').innerText = q.category;
+            const pct = ((state.currentIndex + 1) / 30) * 100;
+            document.getElementById('progress-bar').style.width = `${pct}%`;
+
+            document.getElementById('question-text').innerText = q.text;
+
+            const inputArea = document.getElementById('input-area');
+            inputArea.innerHTML = '';
+
+            // Handle Input Rendering (MCQ vs OPEN)
+            if (q.type === 'mc') {
+                const flexContainer = document.createElement('div');
+                flexContainer.className = "flex flex-col gap-2";
+                
+                const labels = ['A', 'B', 'C', 'D', 'E'];
+                const savedAns = state.answers[state.currentIndex];
+
+                q.options.forEach((optText, idx) => {
+                    const btn = document.createElement('button');
+                    btn.className = `option-btn w-full text-left p-4 rounded-xl border border-slate-700 bg-slate-900/60 font-medium text-sm sm:text-base flex items-center gap-4`;
+                    
+                    if (savedAns === idx) btn.classList.add('selected');
+
+                    if (isConfirmed) {
+                        btn.disabled = true;
+                        if (idx === q.correctIndex) btn.classList.add('correct');
+                        else if (savedAns === idx) btn.classList.add('incorrect');
+                    } else {
+                        btn.onclick = () => window.selectOption(idx);
+                    }
+
+                    btn.innerHTML = `
+                        <span class="w-8 h-8 rounded-lg bg-slate-800 border border-slate-600 flex items-center justify-center shrink-0 text-teal-400 font-display text-sm">
+                            ${labels[idx]}
+                        </span>
+                        <span>${optText}</span>
+                    `;
+                    flexContainer.appendChild(btn);
+                });
+                inputArea.appendChild(flexContainer);
+
+            } else if (q.type === 'open') {
+                const wrapper = document.createElement('div');
+                wrapper.className = "w-full";
+                
+                const textarea = document.createElement('textarea');
+                textarea.id = "open-answer-input";
+                textarea.className = "w-full bg-slate-900/80 border border-teal-500/50 rounded-xl p-4 text-white placeholder-slate-500 focus:outline-none focus:border-teal-400 focus:ring-1 focus:ring-teal-400 transition resize-none h-32 text-lg";
+                textarea.placeholder = q.placeholder;
+                textarea.value = state.answers[state.currentIndex] || "";
+                
+                if (isConfirmed) {
+                    textarea.disabled = true;
+                    if (state.isCorrect[state.currentIndex]) {
+                        textarea.classList.replace('border-teal-500/50', 'border-emerald-500');
+                        textarea.classList.add('bg-emerald-900/20');
+                    } else {
+                        textarea.classList.replace('border-teal-500/50', 'border-rose-500');
+                        textarea.classList.add('bg-rose-900/20');
+                    }
+                } else {
+                    textarea.oninput = (e) => {
+                        window.quizState.answers[state.currentIndex] = e.target.value;
+                        const checkBtn = document.getElementById('btn-check');
+                        if (checkBtn) {
+                            const canCheck = e.target.value.trim().length > 0;
+                            checkBtn.disabled = !canCheck;
+                            checkBtn.style.opacity = canCheck ? '1' : '0.5';
+                        }
+                        // Remove o aviso de erro caso ele comece a consertar a palavra
+                        window.validationErrorMsg = null;
+                        const fbBox = document.getElementById('feedback-box');
+                        if (fbBox && !window.quizState.isConfirmed[state.currentIndex] && fbBox.innerText.includes("fora do padrão")) {
+                            fbBox.classList.add('hidden');
+                        }
+                    };
+                }
+
+                wrapper.appendChild(textarea);
+                inputArea.appendChild(wrapper);
+            }
+
+            // Feedback Box Handling
+            const fbBox = document.getElementById('feedback-box');
+            const fbTitle = document.getElementById('feedback-title');
+            const fbMsg = document.getElementById('feedback-message');
+
+            if (isConfirmed) {
+                fbBox.classList.remove('hidden');
+                
+                if (state.isCorrect[state.currentIndex]) {
+                    fbBox.className = "mb-5 p-4 rounded-xl border shrink-0 bg-emerald-950/80 border-emerald-500 text-emerald-100";
+                    fbTitle.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-400"></i> Diagnosis Correct`;
+                    fbMsg.innerText = q.explanation;
+                } else {
+                    fbBox.className = "mb-5 p-4 rounded-xl border shrink-0 bg-rose-950/80 border-rose-500 text-rose-100";
+                    fbTitle.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-rose-400"></i> Incorrect Diagnosis`;
+                    fbMsg.innerText = q.explanation;
+                }
+            } else {
+                // If it's a failed validation for open type, show error but NOT confirmed
+                if (q.type === 'open' && state.answers[state.currentIndex] && state.answers[state.currentIndex].trim() !== "" && window.validationErrorMsg) {
+                    fbBox.classList.remove('hidden');
+                    fbBox.className = "mb-5 p-4 rounded-xl border shrink-0 bg-amber-950/80 border-amber-500 text-amber-100 shake";
+                    fbTitle.innerHTML = `<i class="fa-solid fa-bell text-amber-400"></i> Invalid Response Format`;
+                    fbMsg.innerText = window.validationErrorMsg;
+                } else {
+                    fbBox.classList.add('hidden');
+                }
+            }
+
+            // Buttons
+            document.getElementById('btn-prev').disabled = state.currentIndex === 0;
+            document.getElementById('btn-prev').style.opacity = state.currentIndex === 0 ? '0.3' : '1';
+
+            const checkBtn = document.getElementById('btn-check');
+            if (isConfirmed) {
+                checkBtn.classList.add('hidden');
+            } else {
+                checkBtn.classList.remove('hidden');
+                let canCheck = false;
+                if (q.type === 'mc') canCheck = state.answers[state.currentIndex] !== null;
+                else if (q.type === 'open') canCheck = (state.answers[state.currentIndex] || "").trim().length > 0;
+                
+                checkBtn.disabled = !canCheck;
+                checkBtn.style.opacity = canCheck ? '1' : '0.5';
+            }
+
+            const nextBtn = document.getElementById('btn-next');
+            if (state.currentIndex === 29) {
+                nextBtn.innerHTML = `Finish <i class="fa-solid fa-flag-checkered ml-1"></i>`;
+                nextBtn.classList.replace('bg-slate-800', 'bg-teal-700');
+                nextBtn.classList.replace('hover:bg-slate-700', 'hover:bg-teal-600');
+            } else {
+                nextBtn.innerHTML = `Next <i class="fa-solid fa-chevron-right ml-1"></i>`;
+                nextBtn.className = "px-4 py-2.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-sm transition";
+            }
+        };
+
+        window.selectOption = function(idx) {
+            if (window.quizState.isConfirmed[window.quizState.currentIndex]) return;
+            window.quizState.answers[window.quizState.currentIndex] = idx;
+            window.validationErrorMsg = null;
+            window.renderQuestion();
+        };
+
+        window.confirmAnswer = function() {
+            const state = window.quizState;
+            const q = state.processedQuestions[state.currentIndex];
+            const ans = state.answers[state.currentIndex];
+
+            if (q.type === 'mc') {
+                if (ans === null) return;
+                state.isConfirmed[state.currentIndex] = true;
+                state.isCorrect[state.currentIndex] = (ans === q.correctIndex);
+                window.validationErrorMsg = null;
+            } else if (q.type === 'open') {
+                const textAns = (ans || "").trim().toLowerCase();
+                if (textAns.length === 0) return;
+
+                // Validation Engine
+                let isValid = false;
+                
+                // 1. Check for valid keywords usando RegExp para buscar pela palavra exata
+                for (let word of q.validationWords) {
+                    const regex = new RegExp(`\\b${word}\\b`, 'i');
+                    if (regex.test(textAns)) {
+                        isValid = true;
+                        break;
+                    }
+                }
+
+                // 2. Check for numbers if allowed
+                if (!isValid && q.numberAllowed) {
+                    const hasNumber = /\d+/.test(textAns);
+                    // Also check for spelled numbers
+                    const spelledNumbers = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "zero"];
+                    const hasSpelled = spelledNumbers.some(n => new RegExp(`\\b${n}\\b`, 'i').test(textAns));
+                    if (hasNumber || hasSpelled) {
+                        isValid = true;
+                    }
+                }
+
+                // If completely off context (very short or no keywords)
+                if (!isValid) {
+                    window.validationErrorMsg = "Resposta fora do padrão esperado. Tente incluir a medida correta (ex: liters, hours, cups), quantificadores adequados (much, a lot, few, some) ou um número. Cheque a grafia!";
+                    window.renderQuestion();
+                    return; // DO NOT CONFIRM. Let them retry.
+                } else {
+                    // Passed validation!
+                    state.isConfirmed[state.currentIndex] = true;
+                    state.isCorrect[state.currentIndex] = true; // For open ended, passing validation counts as correct
+                    window.validationErrorMsg = null;
+                }
+            }
+
+            window.renderQuestion();
+            window.updateHeader();
+        };
+
+        window.nextQuestion = function() {
+            window.validationErrorMsg = null;
+            if (window.quizState.currentIndex < 29) {
+                window.quizState.currentIndex++;
+                window.renderQuestion();
+            } else {
+                window.generateReport();
+            }
+        };
+
+        window.prevQuestion = function() {
+            window.validationErrorMsg = null;
+            if (window.quizState.currentIndex > 0) {
+                window.quizState.currentIndex--;
+                window.renderQuestion();
+            }
+        };
+
+        window.toggleMenu = function() {
+            const modal = document.getElementById('menu-modal');
+            if (modal.classList.contains('hidden')) {
+                window.renderGrid();
+                modal.classList.remove('hidden');
+            } else {
+                modal.classList.add('hidden');
+            }
+        };
+
+        window.jumpToQuestion = function(idx) {
+            window.quizState.currentIndex = idx;
+            window.validationErrorMsg = null;
+            window.toggleMenu();
+            window.renderQuestion();
+        };
+
+        window.updateHeader = function() {
+            const state = window.quizState;
+            let correctCount = state.isCorrect.filter((c, i) => c === true && state.isConfirmed[i]).length;
+            document.getElementById('score-text').innerText = `${correctCount} / 30`;
+        };
+
+        window.renderGrid = function() {
+            const container = document.getElementById('grid-container');
+            container.innerHTML = '';
+            
+            for (let i = 0; i < 30; i++) {
+                const btn = document.createElement('button');
+                const isConfirmed = window.quizState.isConfirmed[i];
+                const isCorrect = window.quizState.isCorrect[i];
+                
+                let baseClass = "h-10 rounded-lg text-sm font-bold flex items-center justify-center transition border ";
+                
+                if (isConfirmed) {
+                    if (isCorrect) baseClass += "bg-emerald-900/80 border-emerald-500 text-emerald-300";
+                    else baseClass += "bg-rose-900/80 border-rose-500 text-rose-300";
+                } else {
+                    baseClass += "bg-slate-800 border-slate-600 text-slate-400";
+                }
+
+                if (i === window.quizState.currentIndex) {
+                    baseClass += " ring-2 ring-cyan-400 ring-offset-2 ring-offset-slate-900";
+                }
+
+                btn.className = baseClass;
+                btn.innerText = i + 1;
+                btn.onclick = () => window.jumpToQuestion(i);
+                
+                container.appendChild(btn);
+            }
+        };
+
+        window.generateReport = function() {
+            document.getElementById('screen-quiz').classList.add('hidden');
+            document.getElementById('btn-open-menu').classList.add('hidden');
+            document.getElementById('screen-report').classList.remove('hidden');
+
+            const state = window.quizState;
+            
+            let totalCorrect = 0;
+            let mcCorrect = 0;
+            let openCorrect = 0;
+
+            for (let i = 0; i < 30; i++) {
+                if (state.isConfirmed[i] && state.isCorrect[i]) {
+                    totalCorrect++;
+                    if (i < 20) mcCorrect++;
+                    else openCorrect++;
+                }
+            }
+
+            const totalErrors = 30 - totalCorrect;
+            const correctPct = Math.round((totalCorrect / 30) * 100);
+            const errorPct = 100 - correctPct;
+            
+            document.getElementById('stat-correct').innerText = totalCorrect;
+            document.getElementById('stat-correct-pct').innerText = `${correctPct}%`;
+            document.getElementById('stat-error').innerText = totalErrors;
+            document.getElementById('stat-error-pct').innerText = `${errorPct}%`;
+
+            const mcPct = Math.round((mcCorrect / 20) * 100);
+            const openPct = Math.round((openCorrect / 10) * 100);
+            document.getElementById('stat-mc-pct').innerText = `${mcPct}%`;
+            document.getElementById('stat-open-pct').innerText = `${openPct}%`;
+
+            const feedbackDiv = document.getElementById('diagnostic-feedback');
+            feedbackDiv.innerHTML = `<h3 class="font-display text-xl text-teal-300 mb-3 border-b border-teal-900 pb-2">Diagnóstico Pedagógico</h3>`;
+
+            if (totalErrors === 0) {
+                feedbackDiv.innerHTML += `<div class="p-3 bg-emerald-900/30 border border-emerald-500 rounded-lg text-emerald-200">Paciente liberado! Você atingiu a excelência absoluta no uso de quantificadores e substantivos contáveis/incontáveis.</div>`;
+                return;
+            }
+
+            let needsReview = false;
+
+            if (mcPct < 70) {
+                needsReview = true;
+                feedbackDiv.innerHTML += `
+                    <div class="mb-3 p-3 bg-slate-800 border-l-4 border-cyan-500 rounded-r-lg text-sm text-slate-300">
+                        <strong class="text-cyan-400 block mb-1">Revisão Objetiva Recomendada:</strong>
+                        Muitos erros nas questões de múltipla escolha indicam dificuldade em separar <strong class="text-white">Countable</strong> de <strong class="text-white">Uncountable</strong>. Lembre-se: 'few/many' para coisas que você conta (1, 2, 3), e 'little/much' para coisas indivisíveis (água, tempo, dinheiro, conselhos).
+                    </div>`;
+            }
+
+            if (openPct < 70) {
+                needsReview = true;
+                feedbackDiv.innerHTML += `
+                    <div class="mb-3 p-3 bg-slate-800 border-l-4 border-purple-500 rounded-r-lg text-sm text-slate-300">
+                        <strong class="text-purple-400 block mb-1">Revisão Discursiva Recomendada:</strong>
+                        Na hora de digitar as respostas (perguntas com 'How much/How many'), você apresentou dificuldades de formulação. Sempre responda utilizando a unidade de medida (liters, hours, cups) ou os quantificadores gerais (a lot, some).
+                    </div>`;
+            }
+
+            if (!needsReview) {
+                feedbackDiv.innerHTML += `<div class="p-3 bg-teal-900/30 border border-teal-500 rounded-lg text-teal-200">Bom trabalho geral! Alguns erros pontuais, mas você demonstrou domínio na maior parte dos exames gramaticais. Revise as questões que errou para fechar 100%.</div>`;
+            }
+        };
+    </script>
+</body>
+</html>
